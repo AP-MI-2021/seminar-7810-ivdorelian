@@ -1,7 +1,6 @@
 from Domain.car_validator import CarValidator
-from Repository.car_order_repository import CarOrderRepository
-from Repository.car_repository import CarRepository
-from Repository.location_repository import LocationRepository
+from Repository.json_repository import JsonRepository
+
 from Service.car_order_service import CarOrderService
 from Service.car_service import CarService
 from Service.location_service import LocationService
@@ -10,14 +9,14 @@ from UserInterface.Console import Console
 
 
 def main():
-    car_repository = CarRepository('cars.json')
+    car_repository = JsonRepository('cars.json')
     car_validator = CarValidator()
     car_service = CarService(car_repository, car_validator)
 
-    location_repository = LocationRepository('locations.json')
+    location_repository = JsonRepository('locations.json')
     location_service = LocationService(location_repository)
 
-    car_order_repository = CarOrderRepository('orders.json')
+    car_order_repository = JsonRepository('orders.json')
     car_order_service = CarOrderService(car_order_repository,
                                         car_repository,
                                         location_repository)

@@ -2,12 +2,12 @@ from typing import List
 
 from Domain.car import Car
 from Domain.car_validator import CarValidator
-from Repository.car_repository import CarRepository
+from Repository.repository import Repository
 
 
 class CarService:
     def __init__(self,
-                 car_repository: CarRepository,
+                 car_repository: Repository,
                  car_validator: CarValidator):
         self.car_repository = car_repository
         self.car_validator = car_validator
@@ -15,11 +15,12 @@ class CarService:
     def add_car(self,
                 id_car: str,
                 fleet_number: str,
-                comfort_level: str):
+                comfort_level: str,
+                model: str):
         """
         TODO
         """
-        car = Car(id_car, fleet_number, comfort_level)
+        car = Car(id_car, fleet_number, comfort_level, model)
         self.car_validator.validate(car)
         self.car_repository.create(car)
 

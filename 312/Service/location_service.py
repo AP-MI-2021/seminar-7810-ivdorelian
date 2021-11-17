@@ -1,12 +1,13 @@
 from typing import List
 
 from Domain.location import Location
-from Repository.location_repository import LocationRepository
+from Repository.repository import Repository
+from ViewModels.street_and_len import StreetAndLen
 
 
 class LocationService:
     def __init__(self,
-                 location_repository: LocationRepository):
+                 location_repository: Repository):
         self.location_repository = location_repository
 
     def add_location(self,
@@ -34,3 +35,13 @@ class LocationService:
 
     def get_all(self) -> List[Location]:
         return self.location_repository.read()
+
+    def get_ordered_by_street_len_desc(self) -> List[StreetAndLen]:
+        """
+        :return: strazile ordonate descrescator dupa lungimea numelui.
+        """
+
+        locations = self.get_all()
+        #streets_and_lens = map(lambda loc: StreetAndLen(loc.street_name, len(loc.street_name)), locations)
+        streets_and_lens = [StreetAndLen(loc.street_name, len(loc.street_name)) for loc in locations]
+        return sorted(streets_and_lens, key=lambda x: x.street_name_len, reverse=True)

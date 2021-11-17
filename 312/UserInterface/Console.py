@@ -1,3 +1,5 @@
+from Domain.car_validator import CarValidationError
+from Repository.exceptions import DuplicateIdError
 from Service.car_order_service import CarOrderService
 from Service.car_service import CarService
 from Service.location_service import LocationService
@@ -17,6 +19,9 @@ class Console:
         print('u[car|loc|ord] - update masina sau locatie sau comanda.')
         print('d[car|loc|ord] - delete masina sau locatie sau comanda.')
         print('s[car|loc|ord] - show all masina sau locatie sau comanda.')
+        print('locord - show locations ordered by the street name length descendingly.')
+        print('carmeancost - show cars ordered by the mean cost per km.')
+        print('commonmodels - show streets together with the most common car model going there.')
         print('x. Iesire')
 
     def run_console(self):
@@ -36,6 +41,12 @@ class Console:
                 self.handle_show_all(self.location_service.get_all())
             elif opt == 'sord':
                 self.handle_show_all(self.car_order_service.get_all())
+            elif opt == 'locord':
+                self.handle_show_all(self.location_service.get_ordered_by_street_len_desc())
+            elif opt == 'carmeancost':
+                self.handle_show_all(self.car_order_service.get_cars_ordered_by_mean_cost_per_km())
+            elif opt == 'commonmodels':
+                self.handle_show_all(self.car_order_service.get_most_frequent_car_model_for_each_street())
             elif opt == 'x':
                 break
             else:
@@ -46,12 +57,13 @@ class Console:
             id_car = input('Dati id-ul masinii: ')
             fleet_number = input('Dati indicativul: ')
             comfort_level = input('Dati nivelul de comfort: ')
+            model = input('Dati modelul masinii: ')
 
-            self.car_service.add_car(id_car, fleet_number, comfort_level)
-        except ValueError as ve:
-            print('Eroare de validare:', ve)
-        except KeyError as ke:
-            print('Eroare de ID:', ke)
+            self.car_service.add_car(id_car, fleet_number, comfort_level, model)
+        except CarValidationError as cve:
+            print('Eroare de validare:', cve)
+        except DuplicateIdError as de:
+            print('ID Duplicat:', de)
         except Exception as ex:
             print('Eroare:', ex)
 

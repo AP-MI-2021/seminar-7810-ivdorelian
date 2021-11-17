@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from Domain.entity import Entity
+from Domain.car import Car
 
 
 @dataclass
-class Car(Entity):
+class CarMeanCostPerKm:
     fleet_number: str
     comfort_level: str
-    model: str
+    mean_cost_per_km: float
