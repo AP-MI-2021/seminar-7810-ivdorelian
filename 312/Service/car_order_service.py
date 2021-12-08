@@ -3,6 +3,7 @@ from typing import List
 from Domain.car import Car
 from Domain.car_order import CarOrder
 from Repository.repository import Repository
+from Service.undo_redo_service import UndoRedoService
 from ViewModels.car_mean_cost_per_km import CarMeanCostPerKm
 from ViewModels.street_most_common_car_model import StreetMostCommonCarModel
 
@@ -11,10 +12,12 @@ class CarOrderService:
     def __init__(self,
                  car_order_repository: Repository,
                  car_repository: Repository,
-                 location_repository: Repository):
+                 location_repository: Repository,
+                 undo_redo_service: UndoRedoService):
         self.car_order_repository = car_order_repository
         self.car_repository = car_repository
         self.location_repository = location_repository
+        self.undo_redo_service = undo_redo_service
 
     def add_car_order(self,
                       id_car_order: str,
@@ -111,3 +114,5 @@ class CarOrderService:
             result.append(StreetMostCommonCarModel(loc.street_name, most_common_model))
 
         return result
+
+

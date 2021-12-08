@@ -3,16 +3,19 @@ from Repository.exceptions import DuplicateIdError
 from Service.car_order_service import CarOrderService
 from Service.car_service import CarService
 from Service.location_service import LocationService
+from Service.undo_redo_service import UndoRedoService
 
 
 class Console:
     def __init__(self,
                  car_service: CarService,
                  location_service: LocationService,
-                 car_order_service: CarOrderService):
+                 car_order_service: CarOrderService,
+                 undo_redo_service: UndoRedoService):
         self.car_service = car_service
         self.location_service = location_service
         self.car_order_service = car_order_service
+        self.undo_redo_service = undo_redo_service
 
     def show_menu(self):
         print('a[car|loc|ord] - adaugare masina sau locatie sau comanda.')
@@ -22,6 +25,8 @@ class Console:
         print('locord - show locations ordered by the street name length descendingly.')
         print('carmeancost - show cars ordered by the mean cost per km.')
         print('commonmodels - show streets together with the most common car model going there.')
+        print('Undo.')
+        print('Redo.')
         print('x. Iesire')
 
     def run_console(self):
@@ -47,6 +52,10 @@ class Console:
                 self.handle_show_all(self.car_order_service.get_cars_ordered_by_mean_cost_per_km())
             elif opt == 'commonmodels':
                 self.handle_show_all(self.car_order_service.get_most_frequent_car_model_for_each_street())
+            elif opt == 'undo':
+                self.undo_redo_service.do_undo()
+            elif opt == 'redo':
+                self.undo_redo_service.do_redo()
             elif opt == 'x':
                 break
             else:
